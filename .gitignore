@@ -1,4 +1,4 @@
-*.o 
-client
-server
-
+kernel_api_client/*.o
+kernel_api_client/client
+kernel_api_server/*.o
+kernel_api_server/server
