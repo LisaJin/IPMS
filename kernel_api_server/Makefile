@@ -1,6 +1,6 @@
 #write by garfield  11/28/2013
 
-EXENAME=vmware_tickets_serverd
+EXENAME=dnion_ipmsd
 
 vpath %.cpp ./
 vpath %.cpp dnion_lib/src/ 
