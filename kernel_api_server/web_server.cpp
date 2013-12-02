@@ -285,6 +285,7 @@ void read_request(process* process) {
     char *prefix = doc_root;
     strncpy(fullname, prefix, strlen(prefix) + 1);
     strncpy(fullname + strlen(prefix), path, strlen(path) + 1);
+    printf(fullname);//添加输出访问路径
     s = get_index_file(fullname, &filestat);
     if (s == -1) {
       process->response_code = 404;

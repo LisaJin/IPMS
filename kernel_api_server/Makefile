@@ -10,7 +10,8 @@ OBJS =	web_server.o \
         errors.o \
         mail.o \
         log.o \
-        database.o
+        database.o \
+        server.o
     
 CC = g++ -O3 -DVMWARE_PORT=51108 -fPIC -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
 #-O2 -g

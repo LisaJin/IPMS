@@ -16,9 +16,8 @@
  * =====================================================================================
  */
 
-#include <Ice/Ice.h>
-#include "../kernel_ice/Ipmstor.h"
 #include "netmask.h"
+#include "ipmstor.h"
 #include "errors.h"
 #include <mysql/mysql.h>
 #include<sys/socket.h>
@@ -38,10 +37,6 @@
 
 using namespace std;
 //using namespace boost; 
-using namespace IPMS;
-using namespace jk ;
-using namespace dx;
-
 
 #define N 8 
 int port; 
@@ -117,13 +112,6 @@ string longtoip(long iplong)
 	s4>>sf;
 	ipstring=ipstring+sf;
 	return ipstring ;
-}
-
-//ICE 获取客户端调用IP地址 以及数据调用 发送端口号 可用于系统调用分析
-string getip(const Ice::Current& current)
-{
-	string requestIp = current.con->toString();
-	return requestIp ;
 }
 
 int   dir_exists(char   *filename)
@@ -322,57 +310,44 @@ string ip_mssea(const string& start )
 
 class IpmstorI : public Ipmstor {
 	public:
-		virtual void printString(const string& s, const Ice::Current&);
-		virtual string ipmssea(const string& start,const string& end, const Ice::Current&);
-		virtual int ipmsdel(const string& start ,const string& end ,const Ice::Current&);
-		virtual int ipmsadd(const string& startip,const string& endip,const string& location,const string& isp ,const Ice::Current&);
-		virtual IPpart ipsplit(const string& ipinfo, const Ice::Current&);
-		virtual int ipmerge(const string& startip,const string& endip,const Ice::Current&);
-		virtual int ipvalid(const string& ipinfo, const Ice::Current&);
-		virtual string getResult(const string& startip,const string& endip,int& resuetsource,const Ice::Current&);
-		virtual  IPinfoList dnipinfoadd(const  IPinfo& ipinfo  ,const Ice::Current& __current);
-		virtual bool x(const Ice::Current& __current);
-		virtual bool updatednipdata(const IPinfo& ipinfo , const Ice::Current& __current);
-		virtual string updatewhois(const string& ip,const Ice::Current& __current);
-		virtual string feedbackview(const string& prov,const string& city, const string& isp,const string& opflag,const Ice::Current& __current);
-	        virtual string feedbackviewlargearea(const string& largearea , const string& isppy, const Ice::Current& __current);
-		virtual string feedbackviewarea(const string& area,const Ice::Current& __current);
-		virtual string feedbackipinfo(const string& ip,const Ice::Current& __current);
-virtual string feedbackviewsheng(const string& sheng,const string& isppy, const Ice::Current& __current);
-virtual string feedbackqitalianxu(const string& prov,const string& city,const Ice::Current& __current);
-		virtual string ipanalysis(const string& ip ,const Ice::Current& __current);
-		virtual string feedbackareaview(const string& areapy , const Ice::Current& __current);
-		virtual SSinfoList feedbackss(const Ice::Current& __current);
-		virtual SSIspList feedbackoldss(const Ice::Current& __current);
-		virtual SSinfoList feedbackhaiwai(const Ice::Current& __current);
-		virtual SSinfoList feedbacks(const Ice::Current& __current);	
-		virtual SSinfoList feedbackpushengpy(const Ice::Current& __current);	
-		virtual ISPinfoList feedbackisp(const Ice::Current& __current);
-		virtual PRinfoList feedbacksp(const Ice::Current& __current);
-		virtual AREAinfoList feedbackarea(const Ice::Current& __current);	
-		virtual SSIspList feedbackssisp(const Ice::Current& __current);
-		virtual string  tosmallcity(const string& ippart,const Ice::Current& __current);
-		virtual bool updateprovpy(const string& provname,const string& provpy,const Ice::Current& __current);
-		virtual bool updatecitypy(const string& provname,const string& provpy,const string& cityname,const string& citypy,const Ice::Current& __current);	
-		virtual bool updatehaiwaipy(const string& provname,const string& provpy,const string& cityname,const string& citypy,const Ice::Current& __current);	
-		virtual bool updateisppy(const string& ispname,const string& isppy,const Ice::Current& __current);
-		virtual bool updateviewinfo(const Ice::Current& current );
-		virtual bool updateOdie(const Ice::Current& current);
+		virtual void printString(const string& s);
+		virtual string ipmssea(const string& start,const string& end);
+		virtual int ipmsdel(const string& start ,const string& end );
+		virtual int ipmsadd(const string& startip,const string& endip,const string& location,const string& isp );
+		virtual IPpart ipsplit(const string& ipinfo);
+		virtual int ipmerge(const string& startip,const string& endip);
+		virtual int ipvalid(const string& ipinfo);
+		virtual string getResult(const string& startip,const string& endip,int& resuetsource);
+		virtual  IPinfoList dnipinfoadd(const  IPinfo& ipinfo   );
+		virtual bool x();
+		virtual bool updatednipdata(const IPinfo& ipinfo  );
+		virtual string updatewhois(const string& ip );
+		virtual string feedbackview(const string& prov,const string& city, const string& isp,const string& opflag );
+	        virtual string feedbackviewlargearea(const string& largearea , const string& isppy );
+		virtual string feedbackviewarea(const string& area );
+		virtual string feedbackipinfo(const string& ip );
+virtual string feedbackviewsheng(const string& sheng,const string& isppy );
+virtual string feedbackqitalianxu(const string& prov,const string& city );
+		virtual string ipanalysis(const string& ip  );
+		virtual string feedbackareaview(const string& areapy  );
+		virtual SSinfoList feedbackss();
+		virtual SSIspList feedbackoldss();
+		virtual SSinfoList feedbackhaiwai();
+		virtual SSinfoList feedbacks();	
+		virtual SSinfoList feedbackpushengpy();	
+		virtual ISPinfoList feedbackisp();
+		virtual PRinfoList feedbacksp();
+		virtual AREAinfoList feedbackarea();	
+		virtual SSIspList feedbackssisp();
+		virtual string  tosmallcity(const string& ippart );
+		virtual bool updateprovpy(const string& provname,const string& provpy );
+		virtual bool updatecitypy(const string& provname,const string& provpy,const string& cityname,const string& citypy );	
+		virtual bool updatehaiwaipy(const string& provname,const string& provpy,const string& cityname,const string& citypy );	
+		virtual bool updateisppy(const string& ispname,const string& isppy );
+		virtual bool updateviewinfo( );
+		virtual bool updateOdie();
 
 };
-
-
-
-
-bool IpmstorI::updateviewinfo(const Ice::Current& current)
-{
-//我什么时候写的这个?//这个是干嘛的？
-	string ipo = getip(current);
-	cout<<ipo<<endl;
-	viewfile("china","jiangsu","nanjing","dianxin",ipo);
-	viewfile("china","shanghai","","dianxin",ipo);
-	return true ;
-}
 
 IPinfo dnipinfodata(string startip,string endip,string location)
 {
@@ -721,7 +696,7 @@ bool upispid(string ip,string ispid)
 return true ;
 }
 
-bool IpmstorI::updateOdie(const Ice::Current& current)
+bool IpmstorI::updateOdie()
 {
         string s="";
 	string mysc ="";
@@ -790,7 +765,7 @@ mysql_close(&mysqlc);
 
 
 
-string IpmstorI::ipanalysis(const string& ip ,const Ice::Current& __current)
+string IpmstorI::ipanalysis(const string& ip  )
 {
 string s = "分析返回结果";
 cout<<"Ip分析数据开始执行"<<endl;
@@ -867,7 +842,7 @@ cout<<"sql: "<<mys<<endl;
 return s ;
 }
 
-bool IpmstorI::updateisppy(const string& ispname,const string& isppy,const Ice::Current& __current)
+bool IpmstorI::updateisppy(const string& ispname,const string& isppy )
 {
 cout<<"更新ISPPY操作开始"<<endl;
 cout<<ispname<<endl;
@@ -902,7 +877,7 @@ cout<<ispname<<endl;
 
 
 
-bool IpmstorI::updateprovpy(const string& provname,const string& provpy,const Ice::Current& __current)
+bool IpmstorI::updateprovpy(const string& provname,const string& provpy )
 {
 	cout<<"解析省"<<endl;
 	string pname=provname;
@@ -935,7 +910,7 @@ bool IpmstorI::updateprovpy(const string& provname,const string& provpy,const Ic
 
 
 
-bool IpmstorI::updatehaiwaipy(const string& provname,const string& provpy,const string& cityname,const string& citypy,const Ice::Current& __current)
+bool IpmstorI::updatehaiwaipy(const string& provname,const string& provpy,const string& cityname,const string& citypy )
 {
 	cout<<"解析城市"<<endl;
 	string pname=provname;
@@ -969,7 +944,7 @@ string mys="update  ip13820121115  set city_id='"+cpy+"' , prov_id='"+ppy+"' ,co
 
 
 
-bool IpmstorI::updatecitypy(const string& provname,const string& provpy,const string& cityname,const string& citypy,const Ice::Current& __current)
+bool IpmstorI::updatecitypy(const string& provname,const string& provpy,const string& cityname,const string& citypy )
 {
 	cout<<"解析城市"<<endl;
 	string pname=provname;
@@ -1000,7 +975,7 @@ bool IpmstorI::updatecitypy(const string& provname,const string& provpy,const st
 }
 
 
-string IpmstorI::tosmallcity(const string& ippart , const Ice::Current& __current)
+string IpmstorI::tosmallcity(const string& ippart  )
 {
 	//啥也木有做	
 	cout<<"大表合并开始"<<endl;
@@ -1009,7 +984,7 @@ string IpmstorI::tosmallcity(const string& ippart , const Ice::Current& __curren
 }
 
 
-PRinfoList IpmstorI::feedbacksp(const Ice::Current& __current)
+PRinfoList IpmstorI::feedbacksp()
 {
 	PRinfoList pril;
 	cout<<"获取省的相关信息"<<endl;
@@ -1077,7 +1052,7 @@ PRinfoList IpmstorI::feedbacksp(const Ice::Current& __current)
 
 
 
-AREAinfoList IpmstorI::feedbackarea(const Ice::Current& __current)
+AREAinfoList IpmstorI::feedbackarea()
 {
 	//cout<<"查找isp "<<endl;
 	AREAinfoList alist ;
@@ -1137,7 +1112,7 @@ AREAinfoList IpmstorI::feedbackarea(const Ice::Current& __current)
 
 
 
-ISPinfoList IpmstorI::feedbackisp(const Ice::Current& __current)
+ISPinfoList IpmstorI::feedbackisp()
 {
 	//cout<<"查找isp "<<endl;
 	ISPinfoList ispil ;
@@ -1205,7 +1180,7 @@ ISPinfoList IpmstorI::feedbackisp(const Ice::Current& __current)
 
 
 
-SSinfoList IpmstorI::feedbackpushengpy(const Ice::Current& __current)
+SSinfoList IpmstorI::feedbackpushengpy()
 {
 //cout<<"查找省市 "<<endl;
 	SSinfoList ssil ;
@@ -1269,7 +1244,7 @@ return ssil;
 }
 
 
-SSinfoList IpmstorI::feedbacks(const Ice::Current& __current)
+SSinfoList IpmstorI::feedbacks()
 {
 //cout<<"查找省市 "<<endl;
 	SSinfoList ssil ;
@@ -1336,7 +1311,7 @@ return ssil;
 }
 
 
-SSinfoList IpmstorI::feedbackhaiwai(const Ice::Current& __current)
+SSinfoList IpmstorI::feedbackhaiwai()
 {
 //cout<<"查找省市 "<<endl;
 	SSinfoList ssil ;
@@ -1405,7 +1380,7 @@ return ssil;
 
 
 
-string  IpmstorI::feedbackipinfo(const string& ip,const Ice::Current& __current)
+string  IpmstorI::feedbackipinfo(const string& ip )
 {
 //cout<<"查找省市 "<<endl;
 	MYSQL  mysql;   
@@ -1454,7 +1429,7 @@ return "soOK--:"+ip;
 
 
 
-SSIspList IpmstorI::feedbackoldss(const Ice::Current& __current)
+SSIspList IpmstorI::feedbackoldss()
 {
 //cout<<"查找省市 "<<endl;
 	SSIspList ssisplist ;
@@ -1578,7 +1553,7 @@ if(mysql_real_connect(&mysql,ipaddress.c_str(),username.c_str(),password.c_str()
 
 
 
-string IpmstorI::updatewhois(const string& ip,const Ice::Current& __current)
+string IpmstorI::updatewhois(const string& ip )
 {
 	MYSQL  mysql;   
 	MYSQL_RES  *mysql_ret;   
@@ -1629,7 +1604,7 @@ string IpmstorI::updatewhois(const string& ip,const Ice::Current& __current)
 }
 
 
-SSinfoList IpmstorI::feedbackss(const Ice::Current& __current)
+SSinfoList IpmstorI::feedbackss()
 {
 //cout<<"查找省市 "<<endl;
 	SSinfoList ssil ;
@@ -1699,7 +1674,7 @@ return ssil;
 
 
 
-string IpmstorI::feedbackareaview(const string& areapy,const Ice::Current& __current)
+string IpmstorI::feedbackareaview(const string& areapy )
 {
 	string s;
 	string mys ="";
@@ -1763,7 +1738,7 @@ string IpmstorI::feedbackareaview(const string& areapy,const Ice::Current& __cur
 }
 
 
-SSIspList IpmstorI::feedbackssisp(const Ice::Current& __current)
+SSIspList IpmstorI::feedbackssisp()
 {
 	SSIspList ssisplist;
 	SSIsp ssisp ;
@@ -1828,7 +1803,7 @@ return ssisplist;
 
 
 
-string IpmstorI::feedbackqitalianxu(const string& prov,const string& city, const Ice::Current& __current)
+string IpmstorI::feedbackqitalianxu(const string& prov,const string& city )
 {
 	string s="";
 	cout<<"开始处理isp_name 为其它的数据"<<endl;
@@ -1959,7 +1934,7 @@ return s+"};};";
 
 
 
-string IpmstorI::feedbackviewsheng(const string& sheng,const string& isppy ,const Ice::Current& __current)
+string IpmstorI::feedbackviewsheng(const string& sheng,const string& isppy  )
 {
 	
 
@@ -2126,7 +2101,7 @@ return s+"};};";
 
 
 
-string IpmstorI::feedbackviewlargearea(const string& largearea , const string& isppy, const Ice::Current& __current)
+string IpmstorI::feedbackviewlargearea(const string& largearea , const string& isppy )
 {
 	
 
@@ -2302,7 +2277,7 @@ return s+"};};";
 
 
 
-string IpmstorI::feedbackviewarea(const string& area ,const Ice::Current& __current)
+string IpmstorI::feedbackviewarea(const string& area  )
 {
     string s="";
 	string mysc ="";
@@ -2459,7 +2434,7 @@ o_file.open(fn,ios_base::app);
 }
 
 
-string IpmstorI::feedbackview(const string& prov,const string& city, const string& isp,const string& opflag,const Ice::Current& __current)
+string IpmstorI::feedbackview(const string& prov,const string& city, const string& isp,const string& opflag )
 {
 	string s="";
 	string mysc ="";
@@ -2750,7 +2725,7 @@ return s+"};};";
 
 
 
-bool IpmstorI::x(const Ice::Current& __current)
+bool IpmstorI::x()
 {
 	//cout<<"x running !"<<endl;
 	IPinfoList ipl; 
@@ -3253,7 +3228,7 @@ IPinfo searchdnipdatastart(IPinfo ii)
 	return ipl;
 }
 
-bool IpmstorI::updatednipdata(const IPinfo& ipinfo , const Ice::Current& __current)
+bool IpmstorI::updatednipdata(const IPinfo& ipinfo  )
 {
 	IPinfo ii;
 	bool bret=true ;
@@ -3337,7 +3312,7 @@ return bret ;
 
 
 
-IPinfoList  IpmstorI::dnipinfoadd(const IPinfo& ipinfo , const Ice::Current& __current )
+IPinfoList  IpmstorI::dnipinfoadd(const IPinfo& ipinfo   )
 {
 	//该方法主要将 startip endip localtion 等信息由函数计算产生的一些结果传送至此 在此接受，并传递给数据库操作层，插入数据库的dn_ip_data 数据表
 	//slice 定义的复杂数据结构向量vector的使用
@@ -3347,7 +3322,6 @@ IPinfoList  IpmstorI::dnipinfoadd(const IPinfo& ipinfo , const Ice::Current& __c
 	ii.startip="1.1.1.0";
 	ii.endip="1.1.1.255";
 */
-	cout<<"ipip"<< __current.con<<endl;
 	Ice::Current iv;	
 	cout<<"调用者IP"<<iv.adapter<<endl;
 	ipl.push_back(ipinfo);
@@ -4035,7 +4009,7 @@ string get_from_ipdata(const string startip,const string endip)
 }
 
 
-string IpmstorI::getResult(const string& startip,const string& endip,int& resuetsource,const Ice::Current&)
+string IpmstorI::getResult(const string& startip,const string& endip,int& resuetsource)
 {
 	cout<<"接受参数"<<startip<<":"<<endip<<":"<<resuetsource<<endl;
 	string result="默认值";
@@ -4045,13 +4019,13 @@ string IpmstorI::getResult(const string& startip,const string& endip,int& resuet
 
 
 
-int IpmstorI::ipmerge(const string& startip,const string& endip,const Ice::Current&)
+int IpmstorI::ipmerge(const string& startip,const string& endip)
 {
 	cout<<"ipmerge函数"<<endl;
 	return 0;
 }
 
-int IpmstorI::ipvalid(const string& ipinfo,const Ice::Current&)
+int IpmstorI::ipvalid(const string& ipinfo)
 {
 	cout<<"IP段信息校验函数"<<endl ;
 	return 0;
@@ -4065,7 +4039,7 @@ cout<<sippart<<endl;
 	return sippart ;
 }
 
-IPpart IpmstorI::ipsplit(const string& ipinfo,const Ice::Current& )
+IPpart IpmstorI::ipsplit(const string& ipinfo )
 {
 	IPpart ipt ;
 	char *p=new char[ipinfo.size()+1];
@@ -4080,7 +4054,7 @@ IPpart IpmstorI::ipsplit(const string& ipinfo,const Ice::Current& )
 
 
 
-int IpmstorI::ipmsadd(const string& startip,const string& endip,const string& location,const string& isp, const Ice::Current&)
+int IpmstorI::ipmsadd(const string& startip,const string& endip,const string& location,const string& isp)
 {
 	printf("IP段信息添加函数调用开始 \n");
 	cout<<"添加函数接收的函数参数："<<endl<<"startip:"<<startip<<endl<<"endip:"<<endip<<"location:"<<location<<"isp:"<<isp<<endl;
@@ -4124,7 +4098,7 @@ int IpmstorI::ipmsadd(const string& startip,const string& endip,const string& lo
 	return 1 ;
 }
 
-int IpmstorI::ipmsdel(const string& start ,const string& end, const Ice::Current&)
+int IpmstorI::ipmsdel(const string& start ,const string& end)
 {
 	printf("删除函数开始工作…… \n");
 	cout<<"删除函数接收的函数参数："<<endl<<"start:"<<start<<endl<<"end:"<<end<<endl;
@@ -4185,7 +4159,7 @@ void LoadConfig(int iSize)
 	printf("############################################################################\n");
 }
 
-string IpmstorI::ipmssea(const string& start ,const string& end,const Ice::Current&)
+string IpmstorI::ipmssea(const string& start ,const string& end)
 {
 	MYSQL_RES  *mysql_ret;   
 	MYSQL_ROW  mysql_row;   
@@ -4230,7 +4204,7 @@ result=string(mysql_row[1])+" "+string(mysql_row[0]);
 	return  result ; 
 }
 
-void IpmstorI::printString(const string& s, const Ice::Current&)
+void IpmstorI::printString(const string& s)
 {
 	//ICE 服务端程序//自定义代码执行 目前主要返回ISP为其他的数据
 	MYSQL  mysqlc;   
@@ -4284,41 +4258,3 @@ mysc="select startip from Odie_OK where country_id='china' and isp_id='qita' ord
 	cout << num_rowsc << endl;
 	mysql_close(&mysqlc);
 }
-
-int main(int argc, char* argv[])
-{
-	time_t nowtime ;
-	time(&nowtime);
-	printf("#############################################################################\n");
-	printf ( "IPMS up now : %s", ctime(&nowtime)); 
-	LoadConfig(1);//参数预留
-//初始化数据库连接
-initsql("sql");
-	int status = 0;
-	Ice::CommunicatorPtr ic;
-	try {
-		ic = Ice::initialize(argc, argv);
-		Ice::ObjectAdapterPtr adapter = ic->createObjectAdapterWithEndpoints(server_adapter, adapter_address);
-		Ice::ObjectPtr object = new IpmstorI;
-		adapter->add(object,ic->stringToIdentity("Ipmstor"));
-		adapter->activate();
-		ic->waitForShutdown();//挂起通信器
-	} catch (const Ice::Exception& e) {
-		cerr << e << endl;
-		status = 1;
-	} catch (const char* msg) {
-		cerr << msg << endl;
-		status = 1;
-	}
-	if (ic) {
-		try {
-			ic->destroy();
-		} catch (const Ice::Exception& e) {
-			cerr << e << endl;
-			status = 1;
-		}
-	}
-	mysql_close(&mysql);
-	return status;
-}
-
