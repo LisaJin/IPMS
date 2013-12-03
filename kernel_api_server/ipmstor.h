@@ -110,4 +110,46 @@ typedef vector<PRinfo> PRinfoList;
 typedef vector<IPpart> IPpartList;
 typedef vector<Odie> OdieList;
 
+class IpmstorI  {
+	public:
+		virtual void printString(const string& s);
+		virtual string ipmssea(const string& start,const string& end);
+		virtual int ipmsdel(const string& start ,const string& end );
+		virtual int ipmsadd(const string& startip,const string& endip,const string& location,const string& isp );
+		virtual IPpart ipsplit(const string& ipinfo);
+		virtual string ipmerge();
+		virtual int ipvalid(const string& ipinfo);
+		virtual string getResult(const string& startip,const string& endip,int& resuetsource);
+		virtual  IPinfoList dnipinfoadd(const  IPinfo& ipinfo   );
+		virtual bool x();
+		virtual bool updatednipdata(const IPinfo& ipinfo  );
+		virtual string updatewhois(const string& ip );
+		virtual string feedbackview(const string& prov,const string& city, const string& isp,const string& opflag );
+	        virtual string feedbackviewlargearea(const string& largearea , const string& isppy );
+		virtual string feedbackviewarea(const string& area );
+		virtual string feedbackipinfo(const string& ip );
+virtual string feedbackviewsheng(const string& sheng,const string& isppy );
+virtual string feedbackqitalianxu(const string& prov,const string& city );
+		virtual string ipanalysis(const string& ip  );
+		virtual string feedbackareaview(const string& areapy  );
+		virtual SSinfoList feedbackss();
+		virtual SSIspList feedbackoldss();
+		virtual SSinfoList feedbackhaiwai();
+		virtual SSinfoList feedbacks();	
+		virtual SSinfoList feedbackpushengpy();	
+		virtual ISPinfoList feedbackisp();
+		virtual PRinfoList feedbacksp();
+		virtual AREAinfoList feedbackarea();	
+		virtual SSIspList feedbackssisp();
+		virtual string  tosmallcity(const string& ippart );
+		virtual bool updateprovpy(const string& provname,const string& provpy );
+		virtual bool updatecitypy(const string& provname,const string& provpy,const string& cityname,const string& citypy );	
+		virtual bool updatehaiwaipy(const string& provname,const string& provpy,const string& cityname,const string& citypy );	
+		virtual bool updateisppy(const string& ispname,const string& isppy );
+		virtual bool updateOdie();
+
+};
+
+
+
 #endif

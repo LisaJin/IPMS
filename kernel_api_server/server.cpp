@@ -306,45 +306,6 @@ string ip_mssea(const string& start )
 	return result ; 
 }
 
-class IpmstorI  {
-	public:
-		virtual void printString(const string& s);
-		virtual string ipmssea(const string& start,const string& end);
-		virtual int ipmsdel(const string& start ,const string& end );
-		virtual int ipmsadd(const string& startip,const string& endip,const string& location,const string& isp );
-		virtual IPpart ipsplit(const string& ipinfo);
-		virtual int ipmerge(const string& startip,const string& endip);
-		virtual int ipvalid(const string& ipinfo);
-		virtual string getResult(const string& startip,const string& endip,int& resuetsource);
-		virtual  IPinfoList dnipinfoadd(const  IPinfo& ipinfo   );
-		virtual bool x();
-		virtual bool updatednipdata(const IPinfo& ipinfo  );
-		virtual string updatewhois(const string& ip );
-		virtual string feedbackview(const string& prov,const string& city, const string& isp,const string& opflag );
-	        virtual string feedbackviewlargearea(const string& largearea , const string& isppy );
-		virtual string feedbackviewarea(const string& area );
-		virtual string feedbackipinfo(const string& ip );
-virtual string feedbackviewsheng(const string& sheng,const string& isppy );
-virtual string feedbackqitalianxu(const string& prov,const string& city );
-		virtual string ipanalysis(const string& ip  );
-		virtual string feedbackareaview(const string& areapy  );
-		virtual SSinfoList feedbackss();
-		virtual SSIspList feedbackoldss();
-		virtual SSinfoList feedbackhaiwai();
-		virtual SSinfoList feedbacks();	
-		virtual SSinfoList feedbackpushengpy();	
-		virtual ISPinfoList feedbackisp();
-		virtual PRinfoList feedbacksp();
-		virtual AREAinfoList feedbackarea();	
-		virtual SSIspList feedbackssisp();
-		virtual string  tosmallcity(const string& ippart );
-		virtual bool updateprovpy(const string& provname,const string& provpy );
-		virtual bool updatecitypy(const string& provname,const string& provpy,const string& cityname,const string& citypy );	
-		virtual bool updatehaiwaipy(const string& provname,const string& provpy,const string& cityname,const string& citypy );	
-		virtual bool updateisppy(const string& ispname,const string& isppy );
-		virtual bool updateOdie();
-
-};
 
 IPinfo dnipinfodata(string startip,string endip,string location)
 {
@@ -1933,50 +1894,13 @@ return s+"};};";
 
 string IpmstorI::feedbackviewsheng(const string& sheng,const string& isppy  )
 {
-	
-
-string s="";
+    string s="";
 	string mysc ="";
-	ofstream o_file;
-	const char filename[] = "";
-
-
-	int statExist;
-	char DIRNAME[]="/var/www/html/usvn/drupal/conf";
-	statExist=dir_exists( DIRNAME );
-	if( statExist )
-	{
-	}else
-	{
-		int statMd;
-		statMd = mkdir(DIRNAME,0755);
-		if ( !statMd )
-		{
-			//printf("Directory created,begin download ...... \n");
-			int statprov ;
-			statprov = mkdir("/var/www/html/usvn/drupal/conf/",0755);
-			if(!statprov)
-			{
-				//printf("文件夹创建成功\n");
-			}else{
-				//printf("文件夹创建失败\n");
-			}
-		}
-		else
-		{
-			printf("Unable to create directory\n");
-		}
-	}	
-
-char fn[] = "/var/www/html/usvn/drupal/conf/201306014named.conf";
 string opflag="viewinfo";
 if(opflag=="viewinfo")
 {
-	ofstream o_file;
-	o_file.open(fn,ios_base::app);
 	mysc="select start,end  from Odie_OK where prov_id='"+sheng+"' and isp_id='"+isppy+"'   order by start; ";//自定义SQL 语句执行
 	s="view "+sheng+"- "+isppy+"    { match-clients {";
-
 }	
 	
 	IPhebingList iphebinglist;
@@ -1988,7 +1912,7 @@ if(opflag=="viewinfo")
 	string result="";	
 	mysql_init(&mysqlc);
 	cout<<"开始连接数据库"<<endl;
-	if(mysql_real_connect(&mysqlc,ipaddress.c_str(),username.c_str(),password.c_str(),dbname.c_str(),0,NULL,0))   
+	if(mysql_real_connect(&mysqlc,"localhost","root","garfield","odie",0,NULL,0))   
 	{   
 		printf("连接成功! \t"); 
 		mysql_query(&mysqlc,"set names utf8 ;");	
@@ -2065,33 +1989,23 @@ if((strtoul(iphebinglist[i+1].start.c_str(),NULL,0)-strtoul(iphebinglist[i].end.
 		}
 	}
 }
-    //cout<<"合并后共计"<<ipduanin.size()<<endl;
-    //const char filename[] = "mytext.txt";
-    //将结果写入文本文件
-    o_file.open(fn,ios_base::app);
-    o_file<<s; //将内容写入到文本文件中
-    o_file.close();
-
 for(int i=0;i<ipduanin.size();i++)
 {
 	const char * s1=ipduanin[i].start.c_str();
 	const char * s2=ipduanin[i].end.c_str();
 	string ip1 = longtoip(strtoul(s1,NULL,0));
 	string ip2=longtoip(strtoul(s2,NULL,0));
-//	string ipduan=get_network_ippart(ip1,ip2);// 旧的算法 结果不准确
-	string caozuo="netmask "+ip1+":"+ip2+" >>"+cstr_to_string(fn)+" ;";
-        system(caozuo.c_str());
-  //      s=s+ipduan;	
-
+    string ss=ip1+":"+ip2 ;
+    string netmaskipduan="";
+    output_t output = OUT_CIDR;
+    char sw[50];
+    strcpy(sw,ss.c_str());
+    spectoaml(sw,1);
+    netmaskipduan=displayduan(output);
+    //在这里计算IP 段的值
+    s=s+netmaskipduan;
 }
-
-
 mysql_close(&mysqlc);
-
-    o_file.open(fn,ios_base::app);
-o_file<<"};};"<<endl;
-  o_file.close();         
- 
 return s+"};};";
 
 }
@@ -4014,10 +3928,10 @@ string IpmstorI::getResult(const string& startip,const string& endip,int& resuet
 
 
 
-int IpmstorI::ipmerge(const string& startip,const string& endip)
+string IpmstorI::ipmerge()
 {
-	cout<<"ipmerge函数"<<endl;
-	return 0;
+	string result ="调用函数策划死成功" ;
+	return result;
 }
 
 int IpmstorI::ipvalid(const string& ipinfo)
