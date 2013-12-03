@@ -1,7 +1,9 @@
+#ifndef __ipmstor_h__
+#define __ipmstor_h__
 
-#ifndef __Ipmstor_h__
-#define __Ipmstor_h__
-
+#include <vector>
+#include <string>
+using namespace std ;
 
 struct IPhebing
 {
@@ -98,14 +100,14 @@ struct Odie
 };
 
 
-typedef ::std::vector<SSIsp> SSIspList ;
-typedef ::std::vector<IPhebing> IPhebingList;
-typedef ::std::vector<AREAinfo> AREAinfoList;
-typedef ::std::vector<IPinfo> IPinfoList;
-typedef ::std::vector<SSinfo> SSinfoList;
-typedef ::std::vector<ISPinfo> ISPinfoList;
-typedef ::std::vector<PRinfo> PRinfoList;
-typedef ::std::vector<IPpart> IPpartList;
-typedef ::std::vector<Odie> OdieList;
+typedef vector<SSIsp> SSIspList ;
+typedef vector<IPhebing> IPhebingList;
+typedef vector<AREAinfo> AREAinfoList;
+typedef vector<IPinfo> IPinfoList;
+typedef vector<SSinfo> SSinfoList;
+typedef vector<ISPinfo> ISPinfoList;
+typedef vector<PRinfo> PRinfoList;
+typedef vector<IPpart> IPpartList;
+typedef vector<Odie> OdieList;
 
 #endif

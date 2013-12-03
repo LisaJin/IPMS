@@ -296,8 +296,7 @@ string ip_mssea(const string& start )
 		else   
 		{   
 		}   
-	}   
-	else   
+	}else   
 	{   
 		printf("连接失败\n"); 
 		mysql_close(&mysql);	
@@ -307,8 +306,7 @@ string ip_mssea(const string& start )
 	return result ; 
 }
 
-
-class IpmstorI : public Ipmstor {
+class IpmstorI  {
 	public:
 		virtual void printString(const string& s);
 		virtual string ipmssea(const string& start,const string& end);
@@ -344,7 +342,6 @@ virtual string feedbackqitalianxu(const string& prov,const string& city );
 		virtual bool updatecitypy(const string& provname,const string& provpy,const string& cityname,const string& citypy );	
 		virtual bool updatehaiwaipy(const string& provname,const string& provpy,const string& cityname,const string& citypy );	
 		virtual bool updateisppy(const string& ispname,const string& isppy );
-		virtual bool updateviewinfo( );
 		virtual bool updateOdie();
 
 };
@@ -3322,8 +3319,6 @@ IPinfoList  IpmstorI::dnipinfoadd(const IPinfo& ipinfo   )
 	ii.startip="1.1.1.0";
 	ii.endip="1.1.1.255";
 */
-	Ice::Current iv;	
-	cout<<"调用者IP"<<iv.adapter<<endl;
 	ipl.push_back(ipinfo);
 	cout<<"vector的输出startip"<<ipl[0].startip<<"  endip:"<<ipl[0].endip<<endl;
 	MYSQL  mysql;   
