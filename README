@@ -1,3 +1,5 @@
 A IP database .
 
-Test from new computer  
+make 
+./dnion_ipmsd  8888  ./
+Use your browser access location just like "http;//ip:8888/"  So that  you can get output at terminal(development)
