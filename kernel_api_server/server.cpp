@@ -1286,41 +1286,9 @@ string IpmstorI::feedbackviewarea(const string& area  )
 {
     string s="";
 	string mysc ="";
-	ofstream o_file;
-	const char filename[] = "";
-	int statExist;
-	char DIRNAME[]="/var/www/html/usvn/drupal/conf";
-	statExist=dir_exists( DIRNAME );
-	if( statExist )
-	{
-	}else
-	{
-		int statMd;
-		statMd = mkdir(DIRNAME,0755);
-		if ( !statMd )
-		{
-			//printf("Directory created,begin download ...... \n");
-			int statprov ;
-			statprov = mkdir("/var/www/html/usvn/drupal/conf/",0755);
-			if(!statprov)
-			{
-				//printf("文件夹创建成功\n");
-			}else{
-				//printf("文件夹创建失败\n");
-			}
-		}
-		else
-		{
-			printf("Unable to create directory\n");
-		}
-	}	
-
- char fn[] = "/var/www/html/usvn/drupal/conf/named_conf_2013-07-09";
 string opflag="viewinfo";
 if(opflag=="viewinfo")
 {
-	ofstream o_file;
-	o_file.open(fn,ios_base::app);
 mysc="select start,end  from Odie_OK where area='"+area+"'      order by start; ";
 	//mysc="select  start,end from  Odie_OK  where isp_name like '%歌华宽带%'  order by start; ";//自定义SQL 语句执行
 cout<<"sql:"<<mysc<<endl;
@@ -1431,9 +1399,6 @@ for(int i=0;i<ipduanin.size();i++)
  //在这里计算IP 段的值
       s=s+netmaskipduan;
 }
-o_file.open(fn,ios_base::app);
- o_file<<s<<"};};"<<endl;
- o_file.close();
  return s+"};};";
 
 }
@@ -1443,40 +1408,8 @@ string IpmstorI::feedbackview(const string& prov,const string& city, const strin
 {
 	string s="";
 	string mysc ="";
-	ofstream o_file;
-	const char filename[] = "";
-	int statExist;
-	char DIRNAME[]="/var/www/html/usvn/drupal/conf";
-	statExist=dir_exists( DIRNAME );
-	if( statExist )
-	{
-	}else
-	{
-		int statMd;
-		statMd = mkdir(DIRNAME,0755);
-		if ( !statMd )
-		{
-			//printf("Directory created,begin download ...... \n");
-			int statprov ;
-			statprov = mkdir("/var/www/html/usvn/drupal/conf/",0755);
-			if(!statprov)
-			{
-				//printf("文件夹创建成功\n");
-			}else{
-				//printf("文件夹创建失败\n");
-			}
-		}
-		else
-		{
-			printf("Unable to create directory\n");
-		}
-	}	
-
-char fn[] = "/var/www/html/usvn/drupal/conf/5min_named2013_07_09";
 if(opflag=="viewinfo")
 {
-	ofstream o_file;
-	o_file.open(fn,ios_base::app);
 	if(prov==""&&city==""&&isp=="")
 	{//省市ISP信息都没有确认的
 		//mysc="select start,end from Dick  where prov_id='"+prov+"' order by start;";
@@ -1632,9 +1565,6 @@ for(int i=0;i<ipduanin.size();i++)
     s=s+netmaskipduan;   
 }
 mysql_close(&mysqlc);
-o_file.open(fn,ios_base::app);
-o_file<<s<<"};};"<<endl;
-o_file.close();         
 return s+"};};";
 }
 
